@@ -18,7 +18,7 @@ on:
 
 env:
   # TODO: Change variable to your image's name.
-  IMAGE_NAME: marcosfreitas/core-php-fpm-web-server
+  IMAGE_NAME: core-php-fpm-web-server
 
 jobs:
   # Run tests.
