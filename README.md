@@ -1,4 +1,7 @@
 # Here are the images of PHP-FPM with aditional packages and using its Alpine version.
+
+![Docker](https://github.com/Skinny-Hosts/core-php-fpm-docker-image/workflows/Docker/badge.svg?branch=master)
+
 ## Running
 
 Use docker-compose to run services:
