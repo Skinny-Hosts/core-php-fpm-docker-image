@@ -1,0 +1,45 @@
+# NGINX and PHP FPM Services to test its configurations
+
+version: "3.7"
+
+services:
+
+  php:
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENVIROMENT: ${APP_ENVIROMENT}
+    # naming during build
+    image: marcosfreitas/core-php-fpm-web-server:${PHP_WS_VERSION}
+    tty: true
+    restart: unless-stopped
+    networks:
+      - backend
+    ports:
+      - 9000
+    volumes:
+      - ./www:/var/www/html
+    environment:
+      - DB_HOST=database
+      - DB_PORT=3306
+      - APP_ENVIROMENT=${APP_ENVIROMENT}
+      - PROJECT_NAME=${COMPOSE_PROJECT_NAME}
+      - DB_USERNAME=docker
+      - DB_PASSWORD=123
+      - REDIS_HOST=''
+      - REDIS_PASSWORD=''
+      - REDIS_PORT=''
+
+networks:
+
+  backend:
+    driver: bridge
+
+volumes:
+
+  dbdata:
+    driver: local
+    labels:
+      sh.project.name: ${COMPOSE_PROJECT_NAME}
