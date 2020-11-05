@@ -12,10 +12,13 @@ on:
 
   # Run tests for any PRs.
   pull_request:
+  
+  # manually run a workflow
+  workflow_dispatch:
 
 env:
   # TODO: Change variable to your image's name.
-  IMAGE_NAME: marcosfreitas/core-php-fpm-web-server
+  IMAGE_NAME: core-php-fpm-web-server
 
 jobs:
   # Run tests.
@@ -32,7 +35,7 @@ jobs:
             docker-compose --file docker-compose.test.yml build
             docker-compose --file docker-compose.test.yml run sut
           else
-            docker build . --file Dockerfile
+            docker build . --no-cache --build-arg APP_ENVIROMENT=production --file Dockerfile
           fi
 
   # Push image to GitHub Packages.
@@ -48,7 +51,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        run: docker build . --no-cache --build-arg APP_ENVIROMENT=production --file Dockerfile --tag $IMAGE_NAME
 
       - name: Log into GitHub Container Registry
       # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
