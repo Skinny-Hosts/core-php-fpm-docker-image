@@ -12,7 +12,7 @@ services:
       args:
         APP_ENVIROMENT: ${APP_ENVIROMENT}
     # naming during build
-    image: marcosfreitas/core-php-fpm-web-server:${PHP_WS_VERSION}
+    image: skinny-hosts/core-php-fpm-web-server:${PHP_WS_VERSION}
     tty: true
     restart: unless-stopped
     networks:
@@ -22,15 +22,15 @@ services:
     volumes:
       - ./www:/var/www/html
     environment:
-      - DB_HOST=database
-      - DB_PORT=3306
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
       - APP_ENVIROMENT=${APP_ENVIROMENT}
       - PROJECT_NAME=${COMPOSE_PROJECT_NAME}
-      - DB_USERNAME=docker
-      - DB_PASSWORD=123
-      - REDIS_HOST=''
-      - REDIS_PASSWORD=''
-      - REDIS_PORT=''
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT=${REDIS_PORT}
 
 networks:
 
