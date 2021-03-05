@@ -1,4 +1,4 @@
-# @version 1.0.0
+# @version 1.2.0
 # Configures PHP-FPM.
 
 FROM php:7.4-fpm-alpine
@@ -15,6 +15,7 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 # @info fix permissions
 # Use the default production configuration
 RUN apk update && apk add --no-cache shadow bash composer &&\
+    composer self-update --2 &&\
     usermod -u 1000 www-data &&\
     mv "$PHP_INI_DIR/php.ini-$APP_ENVIROMENT" "$PHP_INI_DIR/php.ini" &&\
     install-php-extensions mysqli pdo_mysql bcmath gd &&\
