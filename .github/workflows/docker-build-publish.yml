@@ -1,18 +1,18 @@
-name: Docker
+name: Docker Build and Publish Test
 
 on:
   push:
     # Publish `master` as Docker `latest` image.
-    branches:
-      - master
+    branches: [master]
 
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
-
-  # Run tests for any PRs.
   pull_request:
-  
+    branches: [master]
+    tags:
+      - v*
+
   # manually run a workflow
   workflow_dispatch:
 
@@ -23,7 +23,7 @@ env:
 jobs:
   # Run tests.
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,12 +40,11 @@ jobs:
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
-  push:
-    # Ensure test job passes before pushing image.
-    needs: test
+  publish:
+    # Ensure build job passes before pushing image.
+    needs: build
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v2

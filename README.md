@@ -13,4 +13,4 @@ A php file are placed in www folder and this folder is mounted as volume to /var
 ### New Releases
 
 Our images are hosted into GitHub Container Registry.
-New releases are made automatically from push events to the branch **master**.
+New releases are made automatically from push/pull-requests events to the branch **master**.
