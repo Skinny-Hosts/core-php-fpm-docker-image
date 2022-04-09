@@ -18,7 +18,7 @@ RUN apk update && apk add --no-cache shadow bash composer &&\
     composer self-update --2 &&\
     usermod -u 1000 www-data &&\
     mv "$PHP_INI_DIR/php.ini-$APP_ENVIROMENT" "$PHP_INI_DIR/php.ini" &&\
-    install-php-extensions mysqli pdo_mysql bcmath gd &&\
+    install-php-extensions mysqli pdo_mysql bcmath gd imagick &&\
     php-fpm -m
 
 # @todo implement dynamic entrypoint
