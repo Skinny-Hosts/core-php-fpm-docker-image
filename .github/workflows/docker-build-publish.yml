@@ -45,6 +45,7 @@ jobs:
     needs: build
 
     runs-on: ubuntu-latest
+    if: (github.event_name == 'push' || github.event_name == 'pull_request') && github.base_ref == 'master'
 
     steps:
       - uses: actions/checkout@v2
