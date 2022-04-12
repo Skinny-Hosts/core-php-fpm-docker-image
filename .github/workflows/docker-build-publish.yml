@@ -3,13 +3,13 @@ name: Docker Build and Publish Test
 on:
   push:
     # Publish `master` as Docker `latest` image.
-    branches: [master]
+    branches: [master, develop]
 
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
   pull_request:
-    branches: [master]
+    branches: [master, develop]
     tags:
       - v*
 
@@ -45,6 +45,7 @@ jobs:
     needs: build
 
     runs-on: ubuntu-latest
+    if: (github.event_name == 'push' || github.event_name == 'pull_request') && github.base_ref == 'master'
 
     steps:
       - uses: actions/checkout@v2
