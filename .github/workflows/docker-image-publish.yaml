@@ -1,0 +1,80 @@
+name: Docker Image Publish
+
+on:
+  pull_request_target:
+    types:
+      - closed
+    branches: [master]
+
+  push:
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+    branches: [master]
+
+  # manually run a workflow
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: core-php-fpm-web-server
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+
+  publish_production:
+    if: (github.event.pull_request.merged == true && github.base_ref == 'master')
+
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build image
+      run: docker build . --no-cache --build-arg APP_ENVIROMENT=production --file Dockerfile --tag $IMAGE_NAME
+
+    - name: Log into GitHub Container Registry
+    # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
+      run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Push image to GitHub Container Registry
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+        # Change all uppercase to lowercase
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+        # Strip git ref prefix from version
+        # github.ref can have the branch or ref prefix,
+        # e.g. refs/heads/master or refs/tags/v1.2.3
+        # for push: branch or pushed tag
+        # for pull_request: pr merge branch
+        #VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        VERSION=${{ github.ref_name }}
+
+        echo "ref_name "
+        echo ${{ github.ref_name }}
+        echo $(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+        if [[ "${{ github.ref }}" == "refs/tags/"* ]]; then
+            # Strip "v" prefix from tag name
+            # if it have the prefix, it will be pushed as a tag
+            VERSION=$(echo $VERSION | sed -e 's/^v//')
+        else
+            # Use Docker `latest` tag convention
+            [[ "$VERSION" == "master" ]] && VERSION=latest
+        fi
+
+        echo IMAGE_ID=$IMAGE_ID
+        echo VERSION=$VERSION
+
+        docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+        # disabled publishing for now docker push $IMAGE_ID:$VERSION
