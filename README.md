@@ -14,3 +14,15 @@ A php file are placed in www folder and this folder is mounted as volume to /var
 
 Our images are hosted into GitHub Container Registry.
 New releases are made automatically from push/pull-requests events to the branch **master**.
+
+
+
+#### Releasing
+Two images are built with two tags:
+
+- "latest"
+- a numeric tag
+
+For "latest" is automatically labeled at the PR merges.
+
+For numeric version, the new tag (v.1.2.3) should be pushed to **master** to trigger another build process.
