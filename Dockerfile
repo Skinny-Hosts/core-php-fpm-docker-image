@@ -14,11 +14,11 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 # @info fix permissions
 # Use the default production configuration
-RUN apk update && apk add --no-cache shadow bash composer &&\
-    composer self-update --2 &&\
+RUN apk update && \
+    apk add --no-cache shadow bash &&\
     usermod -u 1000 www-data &&\
     mv "$PHP_INI_DIR/php.ini-$APP_ENVIROMENT" "$PHP_INI_DIR/php.ini" &&\
-    install-php-extensions mysqli pdo_mysql bcmath gd imagick &&\
+    install-php-extensions mysqli pdo_mysql bcmath gd imagick @composer &&\
     php-fpm -m
 
 # @todo implement dynamic entrypoint
