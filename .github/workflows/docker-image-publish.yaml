@@ -10,7 +10,6 @@ on:
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
-    branches: [master]
 
   # manually run a workflow
   workflow_dispatch:
