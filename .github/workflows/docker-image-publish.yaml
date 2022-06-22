@@ -19,11 +19,16 @@ env:
   IMAGE_NAME: core-php-fpm-web-server
 
 jobs:
+  tests:
+    uses: ./.github/workflows/docker-image-build-test.yaml
+
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
 
   publish_production:
-    if: (github.event.pull_request.merged == true && github.base_ref == 'master' || startsWith(github.ref, 'refs/tags/v') )
+    if: (((github.event.pull_request.merged == true && github.base_ref == 'master') || startsWith(github.ref, 'refs/tags/v')) && ${{ github.event.workflow_run.conclusion == 'success' }})
+
+    needs: [tests]
 
     strategy:
       matrix:
@@ -74,5 +79,5 @@ jobs:
         echo GENERATED IMAGE_ID: $IMAGE_ID
         echo GENERATED VERSION: $VERSION
 
-        docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-        docker push $IMAGE_ID:$VERSION
+       # docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+       # docker push $IMAGE_ID:$VERSION

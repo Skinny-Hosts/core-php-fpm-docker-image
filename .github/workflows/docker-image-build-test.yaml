@@ -4,14 +4,11 @@ on:
   pull_request:
     branches: [master, develop]
 
-  push:
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
-    branches: [master]
-
   # manually run a workflow
   workflow_dispatch:
+
+  # allow this workflow to be called from other workflows
+  workflow_call:
 
 env:
   IMAGE_NAME: core-php-fpm-web-server
