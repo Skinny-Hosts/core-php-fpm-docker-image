@@ -4,7 +4,7 @@
 FROM php:fpm-alpine
 LABEL maintainer="marcosfreitas@c4network.com.br"
 
-ARG APP_ENVIROMENT
+ARG APP_ENVIROMENT=production
 
 # performance boosting env substitution
 ARG PHP_PM=dynamic
@@ -38,11 +38,10 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 # @info fix permissions
 # Use the default production configuration
 RUN apk update \
-    && apk add --no-cache shadow bash composer \
-    && composer self-update --2 \
+    && apk add --no-cache shadow bash \
     && usermod -u 1000 www-data \
     && mv "$PHP_INI_DIR/php.ini-$APP_ENVIROMENT" "$PHP_INI_DIR/php.ini" \
-    && install-php-extensions mysqli pdo_mysql bcmath gd imagick \
+    && install-php-extensions @composer mysqli pdo_mysql bcmath gd imagick \
     && php-fpm -m
 
 # @todo implement dynamic entrypoint
