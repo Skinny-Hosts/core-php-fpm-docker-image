@@ -1,6 +1,7 @@
 # Here is the image of PHP-FPM with additional packages and using its Alpine version.
 
-![Docker](https://github.com/Skinny-Hosts/core-php-fpm-docker-image/workflows/Docker/badge.svg?branch=master)
+![Docker](https://github.com/Skinny-Hosts/core-php-fpm-docker-image/actions/workflows/docker-image-build-test.yaml/badge.svg?branch=master)
+![Docker](https://github.com/Skinny-Hosts/core-php-fpm-docker-image/actions/workflows/docker-image-publish.yaml/badge.svg?branch=master)
 
 ## Running
 
